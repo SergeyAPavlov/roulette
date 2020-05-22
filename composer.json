@@ -1,0 +1,23 @@
+{
+  "name": "pavlov/roulette",
+  "description": "Roulette test task",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Sergey Pavlov",
+      "email": "sclavium@gmail.com"
+    }
+  ],
+  "autoload": {
+  "psr-4": {
+    "roulette\\": "app/"
+  }
+},
+  "require": {
+    "geometria-lab/rediska": "^0.5.10"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7"
+  }
+}
