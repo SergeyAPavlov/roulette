@@ -33,13 +33,9 @@ class User
 
     public function load($id)
     {
-        $json = $this->store->load(self::DATATYPE, $id);
-        if (is_null($json)) return null;
-        try {
-            $this->cast($json);
-        } catch (\Exception $e) {
-            Throw new \Exception("Incorrect user id=$id load");
-        }
+        $object = $this->store->load(self::DATATYPE, $id);
+        if (!is_object($object)) Throw new \Exception("Incorrect user id=$id load");
+        $this->cast($object);
         return $this;
     }
 

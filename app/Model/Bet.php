@@ -60,12 +60,9 @@ class Bet
 
     public function load($id)
     {
-        $json = $this->store->load(self::DATATYPE, $id);
-        try {
-            $this->cast($json);
-        } catch (\Exception $e) {
-            Throw new \Exception("Incorrect bet id=$id load");
-        }
+        $object = $this->store->load(self::DATATYPE, $id);
+        if (!is_object($object)) Throw new \Exception("Incorrect bet id=$id load");
+        $this->cast($object);
         return $this;
     }
 
