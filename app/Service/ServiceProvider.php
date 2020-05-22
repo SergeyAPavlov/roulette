@@ -5,8 +5,25 @@ namespace roulette\Service;
 
 class ServiceProvider
 {
-    const CURRENT_STORE = 'RedisStore';
-    const CURRENT_FUNCTIONS_SET = 'Set1';
+    private static $currentStore = 'RedisStore';
+    private static $currentFunctionsSet = 'Set1';
+
+    /**
+     * @param string $currentStore
+     */
+    public static function setCurrentStore(string $currentStore)
+    {
+        self::$currentStore = $currentStore;
+    }
+
+    /**
+     * @param string $currentFunctionsSet
+     */
+    public static function setCurrentFunctionsSet(string $currentFunctionsSet)
+    {
+        self::$currentFunctionsSet = $currentFunctionsSet;
+    }
+
 
 
     /**
@@ -16,9 +33,9 @@ class ServiceProvider
      */
     public static function getStore()
     {
-        if (self::CURRENT_STORE == 'RedisStore') {
+        if (self::$currentStore == 'RedisStore') {
             return new RedisStore();
-        } elseif (self::CURRENT_STORE == 'FileStore') {
+        } elseif (self::$currentStore == 'FileStore') {
             return new FileStore();
         }
         else {
@@ -33,7 +50,7 @@ class ServiceProvider
      */
     public static function getUserFunctions()
     {
-        if (self::CURRENT_FUNCTIONS_SET == 'Set1') {
+        if (self::$currentFunctionsSet == 'Set1') {
             return new UserFunctionsSet1();
         } else {
             Throw new \Exception('Unknown functions set');
