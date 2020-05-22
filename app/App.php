@@ -31,6 +31,8 @@ class App
         $bet->type = $type;
         $bet->choose = $choose;
         $bet->turnId = $this->store->getCurrentTurn();
+        $functionsSet = ServiceProvider::getUserFunctions();
+        $functionsSet->afterReceiveBet();
         return $bet->save();
     }
 
@@ -64,6 +66,8 @@ class App
 
     public function nextTurn($winField = null)
     {
+        $functionsSet = ServiceProvider::getUserFunctions();
+        $functionsSet->beforeTurn();
         $current = $this->store->getCurrentTurn();
         $this->store->newTurn();
         $turn = New Turn();
@@ -76,5 +80,6 @@ class App
         $turn->wins = $this->countTurn($turn->bets, $turn->winField);
         $this->payOff($turn->bets, $turn->wins);
         $turn->save();
+        $functionsSet->afterTurn();
     }
 }
