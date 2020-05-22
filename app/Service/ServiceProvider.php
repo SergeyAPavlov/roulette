@@ -18,7 +18,10 @@ class ServiceProvider
     {
         if (self::CURRENT_STORE == 'RedisStore') {
             return new RedisStore();
-        } else {
+        } elseif (self::CURRENT_STORE == 'FileStore') {
+            return new FileStore();
+        }
+        else {
             Throw new \Exception('Unknown store service');
         }
     }
