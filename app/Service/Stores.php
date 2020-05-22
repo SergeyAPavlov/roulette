@@ -11,6 +11,7 @@ interface Stores
     public  function deleteCollection (string $type, string $collection);
 
     public  function getCurrentTurn();
+    public  function setTurn($id); // используется только для отладки
     public  function newTurn();
 
 }

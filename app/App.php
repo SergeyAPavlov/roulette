@@ -22,11 +22,13 @@ class App
         $this->store = ServiceProvider::getStore();
     }
 
-    public function receiveBet($userId, $sum, $choose)
+    public function receiveBet($userId, $sum, $type, $choose = 0)
     {
-        $bet = new Bet($this->store);
+        $bet = new Bet();
+        $bet->set();
         $bet->userId = $userId;
         $bet->sum = $sum;
+        $bet->type = $type;
         $bet->choose = $choose;
         $bet->turnId = $this->store->getCurrentTurn();
         return $bet->save();

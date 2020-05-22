@@ -28,22 +28,30 @@ class Bet
     /** @var  Stores */
     private $store;
 
+
     /**
      * Bet constructor.
+     * @param null|string $id
      */
-    public function __construct()
+    public function __construct($id = null)
     {
         $this->store = ServiceProvider::getStore();
+        if (!is_null($id)) $this->id = $id;
     }
 
     public function create($object)
     {
         $this->cast($object);
+        $this->set();
+        return $this;
+    }
+
+    public function set()
+    {
         if (empty($this->timestamp)) $this->timestamp = time();
         if (empty($this->id)) $this->id = uniqid($this->timestamp);
         return $this;
     }
-
 
     public function save()
     {
@@ -61,5 +69,9 @@ class Bet
         return $this;
     }
 
+    public function delete()
+    {
+        $this->store->delete(self::DATATYPE, $this->id);
+    }
 
 }

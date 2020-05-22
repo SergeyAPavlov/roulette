@@ -51,4 +51,20 @@ class Turn
         return $this;
     }
 
+    public function delete()
+    {
+        $this->store->delete(self::DATATYPE, $this->id);
+        return $this;
+    }
+
+    public static function clear($id)
+    {
+        $store = ServiceProvider::getStore();
+        $betsObjects = $store->loadCollection(Bet::DATATYPE, $id);
+        foreach ($betsObjects as $betObject) {
+            $bat = new Bet($betObject->id);
+            $bat->delete();
+        }
+    }
+
 }

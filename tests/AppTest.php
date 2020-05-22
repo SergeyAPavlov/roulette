@@ -12,6 +12,9 @@ class AppTest extends TestCase
     protected function setUp()
     {
         $this->fixture = new App();
+        $store = \roulette\Service\ServiceProvider::getStore();
+        $store->setTurn(-11);
+
         $user1 = new \roulette\Model\User(-1);
         $user1->name = 'user1';
         $user1->accountSum = 100;
@@ -38,11 +41,18 @@ class AppTest extends TestCase
         $user2->delete();
         $user3 = new \roulette\Model\User(-3);
         $user3->delete();
+        \roulette\Model\Turn::clear(-11);
+
 
     }
     public function testReceiveBets()
     {
+        /** @var App $app */
         $app = $this->fixture;
+        $app->receiveBet(-1, 12, 'twelve', 5);
+        $app->receiveBet(-2, 6, 'black');
+        $app->receiveBet(-3, 3, 'one');
 
+        $this->assertTrue(true);
     }
 }
