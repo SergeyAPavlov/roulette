@@ -5,6 +5,11 @@ use roulette\Helpers\Castable;
 use roulette\Service\Stores;
 use roulette\Service\ServiceProvider;
 
+/**
+ * объект раунда рулетки
+ * Class Turn
+ * @package roulette\Model
+ */
 class Turn
 {
     use Castable;
@@ -27,6 +32,10 @@ class Turn
         $this->store = ServiceProvider::getStore();
     }
 
+    /**
+     * @param array|object $object
+     * @return $this
+     */
     public function create($object)
     {
         $this->cast($object);
@@ -34,12 +43,22 @@ class Turn
         return $this;
     }
 
+    /**
+     * сохранить в хранилище
+     * @return $this
+     */
     public function save()
     {
         $this->store->save(self::DATATYPE, '', $this->id, $this);
         return $this;
     }
 
+    /**
+     * загрузить из хранилища
+     * @param integer $id
+     * @return $this
+     * @throws \Exception
+     */
     public function load($id)
     {
         $object = $this->store->load(self::DATATYPE, $id);
@@ -48,12 +67,20 @@ class Turn
         return $this;
     }
 
+    /**
+     * удалить из хранилища
+     * @return $this
+     */
     public function delete()
     {
         $this->store->delete(self::DATATYPE, $this->id);
         return $this;
     }
 
+    /**
+     * удалить из хранилища все ставки указанного раунда
+     * @param integer $id
+     */
     public static function clear($id)
     {
         $store = ServiceProvider::getStore();

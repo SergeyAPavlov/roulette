@@ -15,13 +15,13 @@ class Bet
     public $id;
     /** @var  integer */
     public $timestamp;
-    /** @var string */
+    /** @var string - тип ставки */
     public $type;
     /** @var  integer */
     public $userId;
-    /** @var  integer */
+    /** @var  integer - поле на которое игрок поставил фишку */
     public $choose;
-    /** @var  integer */
+    /** @var  integer - размер ставки */
     public $sum;
     /** @var  integer */
     public $turnId;
@@ -39,13 +39,11 @@ class Bet
         if (!is_null($id)) $this->id = $id;
     }
 
-    public function create($object)
-    {
-        $this->cast($object);
-        $this->set();
-        return $this;
-    }
 
+    /**
+     * действия при первом создании ставки
+     * @return $this
+     */
     public function set()
     {
         if (empty($this->timestamp)) $this->timestamp = time();
@@ -53,22 +51,36 @@ class Bet
         return $this;
     }
 
+
+    /**
+     * Сохранить ставку в хранилище
+     * @return bool
+     */
     public function save()
     {
         return $this->store->save(self::DATATYPE, $this->turnId, $this->id, $this);
     }
 
+    /**
+     * Загрузить ставку из хранилища
+     * @param int $id
+     * @return $this
+     * @throws \Exception
+     */
     public function load($id)
     {
         $object = $this->store->load(self::DATATYPE, $id);
         if (!is_object($object)) Throw new \Exception("Incorrect bet id=$id load");
-        $this->cast($object);
-        return $this;
+        return $this->cast($object);
     }
 
+
+    /**
+     * удалить ставку из хранилища
+     */
     public function delete()
     {
-        $this->store->delete(self::DATATYPE, $this->id);
+        return $this->store->delete(self::DATATYPE, $this->id);
     }
 
 }

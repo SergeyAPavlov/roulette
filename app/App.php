@@ -22,6 +22,15 @@ class App
         $this->store = ServiceProvider::getStore();
     }
 
+
+    /**
+     * принять ставку и сохранить в хранилище
+     * @param int $userId
+     * @param int $sum
+     * @param string $type
+     * @param int $choose
+     * @return bool
+     */
     public function receiveBet($userId, $sum, $type, $choose = 0)
     {
         $bet = new Bet();
@@ -36,6 +45,13 @@ class App
         return $bet->save();
     }
 
+
+    /**
+     * рассчитать выигрыши по ставкам
+     * @param Bet[] $bets
+     * @param int $winField
+     * @return array
+     */
     public function countTurn($bets, $winField)
     {
         $wins = [];
@@ -49,11 +65,24 @@ class App
         return $wins;
     }
 
+
+    /**
+     * ставки указанного раунда из хранилища
+     * @param int $turnId
+     * @return mixed
+     */
     public function collect($turnId)
     {
         return $this->store->loadCollection(Bet::DATATYPE, $turnId);
     }
 
+
+    /**
+     * снять ставки со счетов игроков
+     * и расплатиться по рассчитанным выигрышам
+     * @param Bet[] $bets
+     * @param array $wins
+     */
     public function payOff($bets, $wins)
     {
         foreach ($bets as $bet) {
@@ -64,6 +93,11 @@ class App
         }
     }
 
+
+    /**
+     * подведение итогов раунда и переход к следующему раунду
+     * @param integer $winField - возможность задать выигрывшее поле (для тестирования)
+     */
     public function nextTurn($winField = null)
     {
         $functionsSet = ServiceProvider::getUserFunctions();

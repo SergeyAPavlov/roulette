@@ -2,17 +2,36 @@
 
 namespace roulette\Model;
 
+/**
+ * правила игры
+ * Class Rules
+ * @package roulette\Model
+ */
 class Rules
 {
 
     const ZERO = 0;
-    private static $types = ['one', 'two', 'three', 'four', 'six', 'twelve', 'black', 'red'];
+    private static $types = ['one', 'two', 'three', 'four', 'six', 'twelve', 'black', 'red']; // типы ставок
 
+
+    /**
+     * @param String $type
+     * @return bool
+     */
     public static function checkType(String $type)
     {
         return in_array($type, self::$types);
     }
 
+    /**
+     * расчет выигрыша по ставке
+     * @param string $type - тип ставки
+     * @param int $choose - выбранное игроком поле
+     * @param int $field - выигравшее поле
+     * @param $sum - размер ставки
+     * @return int
+     * @throws \Exception
+     */
     public static function checkField($type, $choose, $field, $sum)
     {
         if (!self::checkType($type)) {

@@ -8,6 +8,12 @@ class ServiceProvider
     const CURRENT_STORE = 'RedisStore';
     const CURRENT_FUNCTIONS_SET = 'Set1';
 
+
+    /**
+     * создать сервис хранилища
+     * @return Stores
+     * @throws \Exception
+     */
     public static function getStore()
     {
         if (self::CURRENT_STORE == 'RedisStore') {
@@ -17,6 +23,11 @@ class ServiceProvider
         }
     }
 
+    /**
+     *
+     * @return UserFunctions
+     * @throws \Exception
+     */
     public static function getUserFunctions()
     {
         if (self::CURRENT_FUNCTIONS_SET == 'Set1') {

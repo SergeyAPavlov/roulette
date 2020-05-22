@@ -3,7 +3,7 @@
 namespace roulette\Service;
 
 
-class UserFunctionsSet1
+class UserFunctionsSet1 implements UserFunctions
 {
     public  function beforeTurn()
     {
