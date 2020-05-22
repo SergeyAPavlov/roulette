@@ -32,6 +32,13 @@ class RedisStore implements Stores
         return $key->getValue();
     }
 
+    public function delete(string $type, string $id)
+    {
+        $keys = $this->redis->getKeysByPattern("$type:*:$id");
+        $key = new Rediska_Key(current($keys));
+        return $key->delete();
+    }
+
     public function loadCollection(string $type, string $collection)
     {
 
@@ -59,7 +66,9 @@ class RedisStore implements Stores
     public function getCurrentTurn()
     {
         $key = new Rediska_Key(self::CURRENT_TURN_KEY);
-        return $key->getValue();
+        $id = $key->getValue();
+        if (is_null($id)) return 1;
+        else return $id;
     }
 
     public function newTurn()

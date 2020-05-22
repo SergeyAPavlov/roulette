@@ -50,10 +50,14 @@ class Bet
         return $this->store->save(self::DATATYPE, $this->turnId, $this->id, json_encode($this));
     }
 
-    public function load($turnId, $id)
+    public function load($id)
     {
-        $json = $this->store->load($turnId, $id);
-        $this->cast(json_decode($json));
+        $json = $this->store->load(self::DATATYPE, $id);
+        try {
+            $this->cast(json_decode($json));
+        } catch (\Exception $e) {
+            Throw new \Exception("Incorrect bet id=$id load");
+        }
         return $this;
     }
 

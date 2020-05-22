@@ -20,9 +20,10 @@ class User
     /** @var  Stores */
     private $store;
 
-    public function __construct()
+    public function __construct($id = null)
     {
         $this->store = ServiceProvider::getStore();
+        if (!is_null($id)) $this->id = $id;
     }
 
     public function save()
@@ -32,9 +33,19 @@ class User
 
     public function load($id)
     {
-        $json = $this->store->load('', $id);
-        $this->cast(json_decode($json));
+        $json = $this->store->load(self::DATATYPE, $id);
+        if (is_null($json)) return null;
+        try {
+            $this->cast(json_decode($json));
+        } catch (\Exception $e) {
+            Throw new \Exception("Incorrect user id=$id load");
+        }
         return $this;
+    }
+
+    public function delete()
+    {
+        $this->store->delete(self::DATATYPE, $this->id);
     }
 
     public static function add($id, $sum)

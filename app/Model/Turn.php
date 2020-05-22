@@ -43,9 +43,12 @@ class Turn
     public function load($id)
     {
         $json = $this->store->load(self::DATATYPE, $id);
-        $this->cast(json_decode($json));
+        try {
+            $this->cast(json_decode($json));
+        } catch (\Exception $e) {
+            Throw new \Exception("Incorrect turn id=$id load");
+        }
         return $this;
     }
-
 
 }

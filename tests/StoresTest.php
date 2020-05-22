@@ -9,15 +9,6 @@ use roulette\Service\RedisStore;
 class StoresTest extends TestCase
 {
 
-    public function testDeleteStores()
-    {
-        $store = new RedisStore();
-
-        $store->deleteCollection('test', 'test');
-        $load = $store->loadCollection('test',  'test');
-        $this->assertTrue( $load == []);
-    }
-
     public function testSaveLoadStores()
     {
 
@@ -41,4 +32,14 @@ class StoresTest extends TestCase
         $load = $store->loadCollection('test', 'test');
         $this->assertTrue($object == current($load));
     }
+
+    public function testDeleteStores()
+    {
+        $store = new RedisStore();
+
+        $store->deleteCollection('test', 'test');
+        $load = $store->loadCollection('test',  'test');
+        $this->assertTrue( $load == []);
+    }
+
 }
