@@ -40,6 +40,7 @@ class Rules
 
         if ($field <0 OR $field>36) Throw new \Exception ('Impossible field');
         if ($choose <0 OR $choose>36) Throw new \Exception ('Impossible choose');
+        if ($choose == 0 AND !in_array($type, ['black', 'red'])) Throw new \Exception ('Impossible choose');
 
         if ($field == self::ZERO) return 0;
 
