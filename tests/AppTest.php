@@ -16,6 +16,7 @@ class AppTest extends TestCase
         $store = \roulette\Service\ServiceProvider::getStore();
         $this->oldTurn = $store->getCurrentTurn();
         $store->setTurn(-11);
+        \roulette\Model\Turn::clear(-11);
 
         $user1 = new \roulette\Model\User(-1);
         $user1->name = 'user1';
@@ -46,6 +47,7 @@ class AppTest extends TestCase
         \roulette\Model\Turn::clear(-11);
         $store = \roulette\Service\ServiceProvider::getStore();
         $store->setTurn($this->oldTurn);
+        $store->delete(\roulette\Model\Turn::DATATYPE, -11);
         $this->fixture = NULL;
 
     }
@@ -55,10 +57,15 @@ class AppTest extends TestCase
         $app = $this->fixture;
         $store = \roulette\Service\ServiceProvider::getStore();
         $this->receiveBets();
+        $bets = [-1=>12, -2=>6, -3=>3];
         $collect = $app->collect($store->getCurrentTurn());
         $firstBet = current($collect);
         $this->assertTrue(is_object($firstBet));
-        $this->assertTrue($firstBet->sum == 12);
+
+        foreach ($collect as $key=>$item) {
+            $this->assertTrue($item->sum == $bets[$item->userId]);
+        }
+
         \roulette\Model\Turn::clear(-11);
     }
 
@@ -68,7 +75,7 @@ class AppTest extends TestCase
         $app = $this->fixture;
         $app->receiveBet(-1, 12, 'twelve', 5);
         $app->receiveBet(-2, 6, 'black');
-        $app->receiveBet(-3, 3, 'one');
+        $app->receiveBet(-3, 3, 'one', 4);
     }
 
     public function testTurn()
@@ -76,11 +83,34 @@ class AppTest extends TestCase
         /** @var App $app */
         $app = $this->fixture;
         $this->receiveBets();
-        $app->nextTurn();
+        $app->nextTurn(4);
         $turn = new \roulette\Model\Turn();
-        $turn->load($this->oldTurn);
+        $turn->load(-11);
 
-        $this->assertTrue(true);
+        foreach ($turn->wins as $win) {
+            if ($win->userId == -1) $this->assertEquals(0, $win->sum);
+            if ($win->userId == -2) $this->assertEquals(0, $win->sum);
+            if ($win->userId == -3) $this->assertEquals(108, $win->sum);
+        }
+
+        \roulette\Model\Turn::clear(-11);
+    }
+
+    public function testTurn2()
+    {
+        /** @var App $app */
+        $app = $this->fixture;
+        $this->receiveBets();
+        $app->nextTurn(10);
+        $turn = new \roulette\Model\Turn();
+        $turn->load(-11);
+
+        foreach ($turn->wins as $win) {
+            if ($win->userId == -1) $this->assertEquals(36, $win->sum);
+            if ($win->userId == -2) $this->assertEquals(0, $win->sum);
+            if ($win->userId == -3) $this->assertEquals(0, $win->sum);
+        }
+
         \roulette\Model\Turn::clear(-11);
     }
 

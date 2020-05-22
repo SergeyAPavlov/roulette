@@ -42,7 +42,7 @@ class App
             $win->betId = $bet->id;
             $win->userId = $bet->userId;
             $win->sum = Rules::checkField($bet->type, $bet->choose, $winField, $bet->sum);
-            $wins[] = $win;
+            $wins[$win->betId] = $win;
         }
         return $wins;
     }
@@ -62,14 +62,17 @@ class App
         }
     }
 
-    public function nextTurn()
+    public function nextTurn($winField = null)
     {
         $current = $this->store->getCurrentTurn();
         $this->store->newTurn();
         $turn = New Turn();
         $turn->id = $current;
         $turn->bets = $this->collect($current);
-        $turn->winField = mt_rand(0, 36);
+
+        if (is_null($winField)) $turn->winField = mt_rand(0, 36);
+        else $turn->winField = $winField;
+
         $turn->wins = $this->countTurn($turn->bets, $turn->winField);
         $this->payOff($turn->bets, $turn->wins);
         $turn->save();

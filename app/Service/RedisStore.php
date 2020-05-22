@@ -46,7 +46,8 @@ class RedisStore implements Stores
         $res = [];
         foreach ($keys as $k) {
             $key = new Rediska_Key($k);
-            $res[] = $key->getValue();
+            $value = $key->getValue();
+            $res[$value->id] = $value;
         }
         return $res;
     }
