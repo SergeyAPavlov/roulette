@@ -8,11 +8,13 @@ use roulette\App;
 class AppTest extends TestCase
 {
     protected $fixture;
+    public $oldTurn;
 
     protected function setUp()
     {
         $this->fixture = new App();
         $store = \roulette\Service\ServiceProvider::getStore();
+        $this->oldTurn = $store->getCurrentTurn();
         $store->setTurn(-11);
 
         $user1 = new \roulette\Model\User(-1);
@@ -34,7 +36,7 @@ class AppTest extends TestCase
 
     protected function tearDown()
     {
-        $this->fixture = NULL;
+
         $user1 = new \roulette\Model\User(-1);
         $user1->delete();
         $user2 = new \roulette\Model\User(-2);
@@ -42,7 +44,9 @@ class AppTest extends TestCase
         $user3 = new \roulette\Model\User(-3);
         $user3->delete();
         \roulette\Model\Turn::clear(-11);
-
+        $store = \roulette\Service\ServiceProvider::getStore();
+        $store->setTurn($this->oldTurn);
+        $this->fixture = NULL;
 
     }
     public function testReceiveBets()

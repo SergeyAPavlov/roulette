@@ -67,7 +67,7 @@ class RedisStore implements Stores
     {
         $key = new Rediska_Key(self::CURRENT_TURN_KEY);
         $id = $key->getValue();
-        if (is_null($id)) return 1;
+        if (empty($id)) return 1;
         else return $id;
     }
 
