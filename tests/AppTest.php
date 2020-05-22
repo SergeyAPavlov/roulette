@@ -53,10 +53,36 @@ class AppTest extends TestCase
     {
         /** @var App $app */
         $app = $this->fixture;
+        $store = \roulette\Service\ServiceProvider::getStore();
+        $this->receiveBets();
+        $collect = $app->collect($store->getCurrentTurn());
+        $firstBet = current($collect);
+        $this->assertTrue(is_object($firstBet));
+        $this->assertTrue($firstBet->sum == 12);
+        \roulette\Model\Turn::clear(-11);
+    }
+
+    public function receiveBets()
+    {
+        /** @var App $app */
+        $app = $this->fixture;
         $app->receiveBet(-1, 12, 'twelve', 5);
         $app->receiveBet(-2, 6, 'black');
         $app->receiveBet(-3, 3, 'one');
+    }
+
+    public function testTurn()
+    {
+        /** @var App $app */
+        $app = $this->fixture;
+        $this->receiveBets();
+        $app->nextTurn();
+        $turn = new \roulette\Model\Turn();
+        $turn->load($this->oldTurn);
 
         $this->assertTrue(true);
+        \roulette\Model\Turn::clear(-11);
     }
+
+
 }
