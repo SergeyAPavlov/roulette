@@ -22,14 +22,14 @@ class RedisStore implements Stores
     public function save(string $type, string $collection, string $id,  $object)
     {
             $key = new Rediska_Key("$type:$collection:$id");
-            return $key->setValue(json_encode($object));
+            return $key->setValue($object);
     }
 
     public function load(string $type, string $id)
     {
         $keys = $this->redis->getKeysByPattern("$type:*:$id");
         $key = new Rediska_Key(current($keys));
-        return json_decode($key->getValue());
+        return $key->getValue();
     }
 
     public function delete(string $type, string $id)
@@ -46,7 +46,7 @@ class RedisStore implements Stores
         $res = [];
         foreach ($keys as $k) {
             $key = new Rediska_Key($k);
-            $res[] = json_decode($key->getValue());
+            $res[] = $key->getValue();
         }
         return $res;
     }

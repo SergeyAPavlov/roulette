@@ -28,7 +28,7 @@ class User
 
     public function save()
     {
-        return $this->store->save(self::DATATYPE, '', $this->id, json_encode($this));
+        return $this->store->save(self::DATATYPE, '', $this->id, $this);
     }
 
     public function load($id)
@@ -36,7 +36,7 @@ class User
         $json = $this->store->load(self::DATATYPE, $id);
         if (is_null($json)) return null;
         try {
-            $this->cast(json_decode($json));
+            $this->cast($json);
         } catch (\Exception $e) {
             Throw new \Exception("Incorrect user id=$id load");
         }

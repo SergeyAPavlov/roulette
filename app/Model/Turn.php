@@ -36,18 +36,15 @@ class Turn
 
     public function save()
     {
-        $this->store->save(self::DATATYPE, '', $this->id, json_encode($this));
+        $this->store->save(self::DATATYPE, '', $this->id, $this);
         return $this;
     }
 
     public function load($id)
     {
-        $json = $this->store->load(self::DATATYPE, $id);
-        try {
-            $this->cast(json_decode($json));
-        } catch (\Exception $e) {
-            Throw new \Exception("Incorrect turn id=$id load");
-        }
+        $object = $this->store->load(self::DATATYPE, $id);
+        if (!is_object($object)) Throw new \Exception("Incorrect turn id=$id load");
+        $this->cast($object);
         return $this;
     }
 
