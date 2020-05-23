@@ -53,6 +53,8 @@ class AppFilesTest extends AppTest
         $user2->delete();
         $user3 = new User(3);
         $user3->delete();
+        $user4 = new User(4);
+        $user4->delete();
         Turn::clear(11);
         /** @var \roulette\Service\Stores $store */
         $store = $this->store;
