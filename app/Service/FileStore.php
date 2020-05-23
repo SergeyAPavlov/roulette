@@ -17,6 +17,9 @@ class FileStore implements Stores
     public function __construct()
     {
         $this->savePath = __DIR__ . '/../../' . self::$saveFolder;
+        if (!file_exists($this->savePath . '/'.self::$currentTurnKey)) {
+            file_put_contents($this->savePath . '/'.self::$currentTurnKey, '');
+        }
     }
 
     /**
@@ -103,8 +106,9 @@ class FileStore implements Stores
 
     }
 
-    public function deleteTurnKey($id)
+    public function deleteTurnKey()
     {
+        chdir($this->savePath);
         return unlink(self::$currentTurnKey);
     }
 

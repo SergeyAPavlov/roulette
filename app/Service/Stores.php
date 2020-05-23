@@ -16,6 +16,6 @@ interface Stores
     public  function newTurn();
     // используется только для отладки
     public  function setTurn($id);
-    public  function deleteTurnKey($id);
+    public  function deleteTurnKey();
 
 }

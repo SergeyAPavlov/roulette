@@ -95,7 +95,7 @@ class RedisStore implements Stores
         return $key->setValue($id);
     }
 
-    public function deleteTurnKey($id)
+    public function deleteTurnKey()
     {
         $key = new Rediska_Key(self::$prefix.self::CURRENT_TURN_KEY);
         return $key->delete();
