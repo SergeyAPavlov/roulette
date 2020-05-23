@@ -56,4 +56,10 @@ class ServiceProvider
             Throw new \Exception('Unknown functions set');
         }
     }
+
+    public static function setDevStores()
+    {
+        RedisStore::setPrefix('devtest:');
+        FileStore::setSaveFolder('testfiles');
+    }
 }

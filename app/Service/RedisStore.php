@@ -19,6 +19,15 @@ class RedisStore implements Stores
         $this->redis = new Rediska();
     }
 
+    /**
+     * @param string $prefix
+     */
+    public static function setPrefix(string $prefix)
+    {
+        self::$prefix = $prefix;
+    }
+
+
 
     public function save(string $type, string $collection, string $id,  $object)
     {
