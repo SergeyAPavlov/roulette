@@ -40,6 +40,11 @@ class AppTest extends TestCase
         $user3->accountSum = 300;
         $user3->save();
 
+        $user4 = new User(4);
+        $user4->name = 'user4';
+        $user4->accountSum = 400;
+        $user4->save();
+
     }
 
     protected function tearDown()
@@ -51,6 +56,8 @@ class AppTest extends TestCase
         $user2->delete();
         $user3 = new User(3);
         $user3->delete();
+        $user4 = new User(4);
+        $user4->delete();
         Turn::clear(11);
         /** @var \roulette\Service\Stores $store */
         $store = $this->store;
@@ -123,5 +130,45 @@ class AppTest extends TestCase
         Turn::clear(11);
     }
 
+    public function testTurnResults()
+    {
+        /** @var App $app */
+        $app = $this->fixture;
+
+        $user1 = new User(1);
+        $user1->name = 'user1';
+        $user1->accountSum = 100;
+        $user1->save();
+
+        $user2 = new User(2);
+        $user2->name = 'user2';
+        $user2->accountSum = 200;
+        $user2->save();
+
+        $user3 = new User(3);
+        $user3->name = 'user3';
+        $user3->accountSum = 300;
+        $user3->save();
+
+        $user4 = new User(4);
+        $user4->name = 'user4';
+        $user4->accountSum = 400;
+        $user4->save();
+
+        $app->receiveBet(1, 12, 'three', 9);
+        $app->receiveBet(2, 6, 'black');
+        $app->receiveBet(3, 3, 'one', 11);
+
+        $app->nextTurn(11);
+        $turn = new Turn();
+        $turn->load(11);
+
+        $users = User::loadUsers();
+        $this->assertEquals(232, $users[1]->accountSum);
+        $this->assertEquals(206, $users[2]->accountSum);
+        $this->assertEquals(405, $users[3]->accountSum);
+
+        Turn::clear(11);
+    }
 
 }

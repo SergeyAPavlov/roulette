@@ -43,7 +43,7 @@ class FileStore implements Stores
     {
             $key = $type.'_'.$collection.'_'.$id;
             $filename = $this->savePath . '/'. $key;
-            return file_put_contents($filename, json_encode($object));
+            return file_put_contents($filename, json_encode($object), LOCK_EX);
     }
 
     public function load(string $type, string $id)
@@ -71,7 +71,8 @@ class FileStore implements Stores
         $fileNames = glob($pattern);
         $res = [];
         foreach ($fileNames as $fileName) {
-            $res[] = json_decode(file_get_contents($fileName));
+            $value = json_decode(file_get_contents($fileName));
+            $res[$value->id] = $value;
         }
         return $res;
     }
@@ -89,7 +90,7 @@ class FileStore implements Stores
     public function setTurn($id)
     {
         chdir($this->savePath);
-        return file_put_contents(self::$currentTurnKey, $id);
+        return file_put_contents(self::$currentTurnKey, $id,LOCK_EX);
     }
 
     public function getCurrentTurn()
@@ -102,7 +103,7 @@ class FileStore implements Stores
     {
         chdir($this->savePath);
         $turnId = file_get_contents(self::$currentTurnKey);
-        return file_put_contents(self::$currentTurnKey, $turnId+1);
+        return file_put_contents(self::$currentTurnKey, $turnId+1, LOCK_EX);
 
     }
 

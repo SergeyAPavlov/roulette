@@ -79,4 +79,10 @@ class User
         $user->save();
     }
 
+    public static function loadUsers()
+    {
+        $store = ServiceProvider::getStore();
+        return $store->loadCollection(self::DATATYPE, '');
+    }
+
 }
