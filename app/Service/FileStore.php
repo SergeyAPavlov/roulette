@@ -7,8 +7,8 @@ namespace roulette\Service;
 class FileStore implements Stores
 {
 
-    private const SAVE_FOLDER = 'files';
-    private const CURRENT_TURN_KEY = 'CURRENT_TURN_KEY';
+    private static $saveFolder = 'files';
+    private static $currentTurnKey = 'CURRENT_TURN_KEY';
     private $savePath;
 
     /**
@@ -16,7 +16,23 @@ class FileStore implements Stores
      */
     public function __construct()
     {
-        $this->savePath = __DIR__ . '/../../' . self::SAVE_FOLDER;
+        $this->savePath = __DIR__ . '/../../' . self::$saveFolder;
+    }
+
+    /**
+     * @param string $saveFolder
+     */
+    public static function setSaveFolder(string $saveFolder)
+    {
+        self::$saveFolder = $saveFolder;
+    }
+
+    /**
+     * @param string $currentTurnKey
+     */
+    public static function setCurrentTurnKey(string $currentTurnKey)
+    {
+        self::$currentTurnKey = $currentTurnKey;
     }
 
 
@@ -70,23 +86,26 @@ class FileStore implements Stores
     public function setTurn($id)
     {
         chdir($this->savePath);
-        return file_put_contents(self::CURRENT_TURN_KEY, $id);
+        return file_put_contents(self::$currentTurnKey, $id);
     }
 
     public function getCurrentTurn()
     {
         chdir($this->savePath);
-        return file_get_contents(self::CURRENT_TURN_KEY);
+        return file_get_contents(self::$currentTurnKey);
     }
 
     public function newTurn()
     {
         chdir($this->savePath);
-        $turnId = file_get_contents(self::CURRENT_TURN_KEY);
-        return file_put_contents(self::CURRENT_TURN_KEY, $turnId+1);
+        $turnId = file_get_contents(self::$currentTurnKey);
+        return file_put_contents(self::$currentTurnKey, $turnId+1);
 
     }
 
-
+    public function deleteTurnKey($id)
+    {
+        return unlink(self::$currentTurnKey);
+    }
 
 }

@@ -12,7 +12,10 @@ interface Stores
     public  function deleteCollection (string $type, string $collection);
 
     public  function getCurrentTurn(); // текущий раунд рулетки
-    public  function setTurn($id); // используется только для отладки
+
     public  function newTurn();
+    // используется только для отладки
+    public  function setTurn($id);
+    public  function deleteTurnKey($id);
 
 }

@@ -48,6 +48,7 @@ class AppTest extends TestCase
         $store = \roulette\Service\ServiceProvider::getStore();
         $store->setTurn($this->oldTurn);
         $store->delete(\roulette\Model\Turn::DATATYPE, -11);
+        $store->deleteTurnKey(-10);
         $this->fixture = NULL;
 
     }
