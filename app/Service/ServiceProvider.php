@@ -59,5 +59,6 @@ class ServiceProvider
     {
         RedisStore::setPrefix('devtest:');
         FileStore::setSaveFolder('testfiles');
+        Logger::setLogFileName('tests.log');
     }
 }
