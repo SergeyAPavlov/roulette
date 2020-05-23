@@ -67,6 +67,7 @@ class AppTest extends TestCase
 
     }
 
+    // проверка правильности сохранения ставок
     public function testReceiveBets()
     {
         /** @var App $app */
@@ -95,6 +96,7 @@ class AppTest extends TestCase
         $app->receiveBet(3, 3, 'one', 4);
     }
 
+    // проверка ожидаемых результатов игры по массиву wins
     public function testTurn()
     {
         /** @var App $app */
@@ -131,6 +133,7 @@ class AppTest extends TestCase
         Turn::clear(11);
     }
 
+    // проверка ожидаемых результатов игры по счетам игроков
     public function testTurnResults()
     {
         /** @var App $app */
@@ -168,6 +171,38 @@ class AppTest extends TestCase
         $this->assertEquals(232, $users[1]->accountSum);
         $this->assertEquals(206, $users[2]->accountSum);
         $this->assertEquals(405, $users[3]->accountSum);
+
+        Turn::clear(11);
+    }
+
+    // проверка расчета с несколькими ставками от одного юзера
+    public function testMultiBets()
+    {
+        /** @var App $app */
+        $app = $this->fixture;
+
+        $user1 = new User(1);
+        $user1->name = 'user1';
+        $user1->accountSum = 100;
+        $user1->save();
+
+        $user2 = new User(2);
+        $user2->name = 'user2';
+        $user2->accountSum = 100;
+        $user2->save();
+
+        $app->receiveBet(1, 12, 'three', 9);
+        $app->receiveBet(2, 10, 'black');
+        $app->receiveBet(2, 20, 'twelve', 11);
+
+        $app->nextTurn(11);
+        $turn = new Turn();
+        $turn->load(11);
+
+        $users = User::loadUsers();
+        $this->assertEquals(232, $users[1]->accountSum);
+        $this->assertEquals(150, $users[2]->accountSum);
+
 
         Turn::clear(11);
     }
