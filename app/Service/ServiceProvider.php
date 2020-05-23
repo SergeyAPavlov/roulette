@@ -25,7 +25,6 @@ class ServiceProvider
     }
 
 
-
     /**
      * создать сервис хранилища
      * @return Stores
@@ -37,8 +36,7 @@ class ServiceProvider
             return new RedisStore();
         } elseif (self::$currentStore == 'FileStore') {
             return new FileStore();
-        }
-        else {
+        } else {
             Throw new \Exception('Unknown store service');
         }
     }

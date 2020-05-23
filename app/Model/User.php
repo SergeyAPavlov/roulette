@@ -1,6 +1,7 @@
 <?php
 
 namespace roulette\Model;
+
 use roulette\Helpers\Castable;
 use roulette\Service\Stores;
 use roulette\Service\ServiceProvider;

@@ -3,7 +3,6 @@
 namespace roulette\Service;
 
 
-
 class FileStore implements Stores
 {
 
@@ -17,8 +16,8 @@ class FileStore implements Stores
     public function __construct()
     {
         $this->savePath = __DIR__ . '/../../' . self::$saveFolder;
-        if (!file_exists($this->savePath . '/'.self::$currentTurnKey)) {
-            file_put_contents($this->savePath . '/'.self::$currentTurnKey, '');
+        if (!file_exists($this->savePath . '/' . self::$currentTurnKey)) {
+            file_put_contents($this->savePath . '/' . self::$currentTurnKey, '');
         }
     }
 
@@ -39,16 +38,16 @@ class FileStore implements Stores
     }
 
 
-    public function save(string $type, string $collection, string $id,  $object)
+    public function save(string $type, string $collection, string $id, $object)
     {
-            $key = $type.'_'.$collection.'_'.$id;
-            $filename = $this->savePath . '/'. $key;
-            return file_put_contents($filename, json_encode($object), LOCK_EX);
+        $key = $type . '_' . $collection . '_' . $id;
+        $filename = $this->savePath . '/' . $key;
+        return file_put_contents($filename, json_encode($object), LOCK_EX);
     }
 
     public function load(string $type, string $id)
     {
-        $pattern = $type.'_*_'.$id;
+        $pattern = $type . '_*_' . $id;
         chdir($this->savePath);
         $fileName = current(glob($pattern));
         return json_decode(file_get_contents($fileName));
@@ -56,7 +55,7 @@ class FileStore implements Stores
 
     public function delete(string $type, string $id)
     {
-        $pattern = $type.'_*_'.$id;
+        $pattern = $type . '_*_' . $id;
         chdir($this->savePath);
         $fileName = current(glob($pattern));
         if (file_exists($fileName)) return unlink($fileName);
@@ -66,7 +65,7 @@ class FileStore implements Stores
     public function loadCollection(string $type, string $collection)
     {
 
-        $pattern = $type.'_'.$collection.'_*';
+        $pattern = $type . '_' . $collection . '_*';
         chdir($this->savePath);
         $fileNames = glob($pattern);
         $res = [];
@@ -79,7 +78,7 @@ class FileStore implements Stores
 
     public function deleteCollection(string $type, string $collection)
     {
-        $pattern = $type.'_'.$collection.'_*';
+        $pattern = $type . '_' . $collection . '_*';
         chdir($this->savePath);
         $fileNames = glob($pattern);
         foreach ($fileNames as $fileName) {
@@ -90,7 +89,7 @@ class FileStore implements Stores
     public function setTurn($id)
     {
         chdir($this->savePath);
-        return file_put_contents(self::$currentTurnKey, $id,LOCK_EX);
+        return file_put_contents(self::$currentTurnKey, $id, LOCK_EX);
     }
 
     public function getCurrentTurn()
@@ -103,7 +102,7 @@ class FileStore implements Stores
     {
         chdir($this->savePath);
         $turnId = file_get_contents(self::$currentTurnKey);
-        return file_put_contents(self::$currentTurnKey, $turnId+1, LOCK_EX);
+        return file_put_contents(self::$currentTurnKey, $turnId + 1, LOCK_EX);
 
     }
 

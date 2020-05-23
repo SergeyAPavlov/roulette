@@ -63,9 +63,10 @@ class AppTest extends TestCase
         $store = $this->store;
         $store->delete(Turn::DATATYPE, 11);
         $store->deleteTurnKey();
-        $this->fixture = NULL;
+        $this->fixture = null;
 
     }
+
     public function testReceiveBets()
     {
         /** @var App $app */
@@ -73,12 +74,12 @@ class AppTest extends TestCase
         /** @var \roulette\Service\Stores $store */
         $store = $this->store;
         $this->receiveBets();
-        $bets = [1=>12, 2=>6, 3=>3];
+        $bets = [1 => 12, 2 => 6, 3 => 3];
         $collect = $app->collect($store->getCurrentTurn());
         $firstBet = current($collect);
         $this->assertTrue(is_object($firstBet));
 
-        foreach ($collect as $key=>$item) {
+        foreach ($collect as $key => $item) {
             $this->assertTrue($item->sum == $bets[$item->userId]);
         }
 
