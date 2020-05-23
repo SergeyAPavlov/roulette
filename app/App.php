@@ -8,6 +8,7 @@ use roulette\Model\Turn;
 use roulette\Model\User;
 use roulette\Service\ServiceProvider;
 use roulette\Service\Stores;
+use roulette\Service\Logger;
 
 class App
 {
@@ -56,11 +57,15 @@ class App
     {
         $wins = [];
         foreach ($bets as $bet) {
-            $win = new \stdClass();
-            $win->betId = $bet->id;
-            $win->userId = $bet->userId;
-            $win->sum = Rules::checkField($bet->type, $bet->choose, $winField, $bet->sum);
-            $wins[$win->betId] = $win;
+            try {
+                $win = new \stdClass();
+                $win->betId = $bet->id;
+                $win->userId = $bet->userId;
+                $win->sum = Rules::checkField($bet->type, $bet->choose, $winField, $bet->sum);
+                $wins[$win->betId] = $win;
+            } catch (\Throwable $t) {
+                Logger::write($t->getMessage());
+            }
         }
         return $wins;
     }
@@ -85,6 +90,7 @@ class App
      */
     public function payOff($bets, $wins)
     {
+        // todo: этот расчет бы надо сделать неделимой трансакцией - восстанавливать исходное состояние при исключении
         foreach ($bets as $bet) {
             User::add($bet->userId, -$bet->sum);
         }
