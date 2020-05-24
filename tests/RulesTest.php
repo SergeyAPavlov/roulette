@@ -45,6 +45,22 @@ class RulesTest extends TestCase
         $this->assertEquals($check, 24);
     }
 
+    public function testZero()
+    {
+        $rules = new Rules();
+
+        $check = $rules->checkField('three', 16, 0, 1);
+        $this->assertEquals($check, 0);
+    }
+
+    public function testZero2()
+    {
+        $rules = new Rules();
+
+        $check = $rules->checkField('black', 0, 0, 10);
+        $this->assertEquals($check, 0);
+    }
+
     public function testBlack()
     {
         $rules = new Rules();

@@ -7,6 +7,7 @@ use roulette\App;
 use roulette\Service\ServiceProvider;
 use roulette\Model\User;
 use roulette\Model\Turn;
+use roulette\Model\Bet;
 
 class AppTest extends TestCase
 {
@@ -96,6 +97,29 @@ class AppTest extends TestCase
         $app->receiveBet(3, 3, 'one', 4);
     }
 
+    // проверка расчета результатов
+    public function testCountTurn()
+    {
+        $bets = Bet::createBets(
+            [
+                [1, 12, 'twelve', 15],
+                [2, 6, 'black', 0],
+                [3, 3, 'one', 4]
+            ]
+        );
+        $winField = 4;
+        /** @var App $app */
+        $app = $this->fixture;
+        $wins = $app->countTurn($bets, $winField);
+
+        foreach ($wins as $win) {
+            if ($win->userId == 1) $this->assertEquals(36, $win->sum);
+            if ($win->userId == 2) $this->assertEquals(0, $win->sum);
+            if ($win->userId == 3) $this->assertEquals(108, $win->sum);
+        }
+
+    }
+
     // проверка ожидаемых результатов игры по массиву wins
     public function testTurn()
     {
@@ -114,6 +138,7 @@ class AppTest extends TestCase
 
         Turn::clear(11);
     }
+
 
     public function testTurn2()
     {

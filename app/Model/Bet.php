@@ -84,4 +84,25 @@ class Bet
         return $this->store->delete(self::DATATYPE, $this->id);
     }
 
+
+    /**
+     * упрощенное создание массива ставок
+     * @param string[] $betsArray
+     * @return array
+     */
+    public static function createBets($betsArray)
+    {
+        $bets = [];
+        foreach ($betsArray as $item) {
+            $bet = new Bet();
+            $bet->set();
+            $bet->userId = $item[0];
+            $bet->sum = $item[1];
+            $bet->type = $item[2];
+            $bet->choose = $item[3];
+            $bets[$bet->id] = $bet;
+        }
+        return $bets;
+    }
+
 }
