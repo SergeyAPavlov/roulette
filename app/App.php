@@ -14,6 +14,7 @@ class App
 {
     /** @var  Stores */
     private $store;
+    private $functionsSet;
 
     /**
      * App constructor.
@@ -21,6 +22,7 @@ class App
     public function __construct()
     {
         $this->store = ServiceProvider::getStore();
+        $this->functionsSet = ServiceProvider::getUserFunctions();
     }
 
 
@@ -106,8 +108,7 @@ class App
      */
     public function nextTurn($winField = null)
     {
-        $functionsSet = ServiceProvider::getUserFunctions();
-        $functionsSet->beforeTurn();
+        $this->functionsSet->beforeTurn();
         $current = $this->store->getCurrentTurn();
         $this->store->newTurn();
         $turn = New Turn();
@@ -120,6 +121,6 @@ class App
         $turn->wins = $this->countTurn($turn->bets, $turn->winField);
         $this->payOff($turn->bets, $turn->wins);
         $turn->save();
-        $functionsSet->afterTurn();
+        $this->functionsSet->afterTurn();
     }
 }
